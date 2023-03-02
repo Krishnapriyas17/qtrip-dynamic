@@ -5,6 +5,9 @@ import config from "../conf/index.js";
 function getCityFromURL(search) {
   // TODO: MODULE_ADVENTURES
   // 1. Extract the city id from the URL's Query Param and return it
+  let params = new URLSearchParams(search);
+  let city = params.get('city');
+  return city;
 
 }
 
@@ -12,6 +15,14 @@ function getCityFromURL(search) {
 async function fetchAdventures(city) {
   // TODO: MODULE_ADVENTURES
   // 1. Fetch adventures using the Backend API and return the data
+  try{
+    const response=await fetch (config.backendEndpoint+'/adventures?city='+city);
+    const data=await response.json()
+    return data;
+    }
+    catch  {
+      return null;
+    }
 
 }
 
@@ -19,7 +30,55 @@ async function fetchAdventures(city) {
 function addAdventureToDOM(adventures) {
   // TODO: MODULE_ADVENTURES
   // 1. Populate the Adventure Cards and insert those details into the DOM
+//   adventures.forEach((key) => {
+//   let ele = document.createElement("div");
+//   ele.className = "col-6 col-lg-3 mb-4";
+//   ele.innerHTML = `<a href="detail/?adventure=${key.id}" id=${key.id}
+//   <div class="category-banner">${key.category}
+//   </div>
+  
+//   <img class="img" src=${key.image} />
+//   <div class="card-body col-md-12 mt-2">
+//   <div class="card-text justify-content-between d-flex">
+//     <h6>${key.name}</h6>
+//     <h6>₹${key.costPerHead}</h6>
+//   </div>
+//   <div class="card-text justify-content-between d-flex">
+//     <h6>Duration</h6>
+//     <h6>${key.duration} Hours</h6>
+//   </div>
+//   </div>
+//   </a>
+//   `;
+//   document.getElementById("data").appendChild(ele);
+// });
 
+adventures.forEach((key) => {
+  //addCityToDOM(key.id, key.category, key.image, key.name, key.costPerHead, key.duration);    let rowDiv = document.getElementById("data");
+  let colDiv = document.createElement("div");
+  colDiv.className = "col-6 col-md-4 col-lg-3 mb-5";
+  colDiv.innerHTML = `    
+  <a href = "./detail/?adventure=${key.id}" id = ${key.id}>        
+  <div class = "position-relative">        
+  <div class = "category-banner">${key.category}</div>          
+  <div class = "card activity-card mx-3">          
+  <img src = ${key.image} class="card-img-top" alt = ${key.image}>           
+  <div class = "card-body col-md-12 mt-2">            
+  <div class = "card-text d-flex justify-content-between">              
+  <p>${key.name}</p>                
+  <p>₹${key.costPerHead}</p>                 
+  </div>                   
+  <div class = "card-text d-flex justify-content-between">                     
+  <p>Duration</p>                       
+  <p>${key.duration} Hours</p>                       
+  </div>                           
+  </div>                            
+  </div>                           
+  </div>                           
+  </a>    
+  `;
+  document.getElementById("data").appendChild(colDiv);
+});
 }
 
 //Implementation of filtering by duration which takes in a list of adventures, the lower bound and upper bound of duration and returns a filtered list of adventures.
